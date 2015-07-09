@@ -1,43 +1,58 @@
 $.fn.filey = function(options){
-	selector = this;
-
+	selector = $(this);
 	
     options = $.extend({
-        selector: this
+    	removeFile: false,
+    	labelNoFile: 'no file choosen',
+    	labelChooseFile: 'choose a file',
+    	labelChangeFile: 'change file',
+    	labelRemoveFile: 'remove file'
         
     }, options);
     
-    $(document).ready(function() {
-    	var inputFields = $('input[type="file"]');
-    	console.log(inputFields);
-    	
-    	var inputWidth = $(inputFields).width();
-    	var inputHeight = $(inputFields).height();
-    	
-    	var showfile = $('<div />', {
-    		text: 'no file chosen',
-    		'class': 'filey-show',
-    		'placeholder': inputFields.val(),
-    		'style': 'height:' + inputHeight + 'px; width:' + inputWidth + 'px;'
-         });
-    	
-    	var changefile = $('<button/>', {
-    		text: 'choose a file',
-            'class': 'filey-change',
-           'style': 'height:' + inputHeight + 'px; width:' + inputWidth + 'px;'
-         });
-    	
+	var inputFields = $(selector);
+	var inputWidth = $(inputFields).width();
+	var inputHeight = $(inputFields).height();
+	
+	var showfile = $('<div />', {
+		text: options.labelNoFile,
+		'class': 'filey-show',
+		'placeholder': inputFields.val(),
+		'style': 'height:' + inputHeight + 'px; width:' + inputWidth + 'px;'
+     });
+	
+	var changefile = $('<button/>', {
+		text: options.labelChooseFile,
+        'class': 'filey-change',
+        'style': 'display: block; height:' + inputHeight + 'px; width:' + inputWidth + 'px;'
+     });
+	
+	var removefile = $('<button/>', {
+		text: options.labelRemoveFile,
+		'class': 'filey-remove',
+		'style': 'display: block; height:' + inputHeight + 'px; width:' + inputWidth + 'px;'
+	});
+	
 	var inputStyle = 'display: block; width: 0; height: 0; overflow:hiddden; visability:hidden';
-
+	
 	$(inputFields).attr('style', inputStyle).wrap('<div class="filey-wrap"></div>');
-    	$(inputFields).after(showfile);
-    	$(inputFields).after(changefile);
+	$(inputFields).after(showfile);
+	$(inputFields).after(changefile);
+	
+	if (options.removeFile) {
+		$(inputFields).after(removefile);
+	}
 
-    	$('.filey-change').click(function() {
-    		$(inputFields).click();
-    	});
-    	
-    	$(inputFields).change(function() {
+	$('.filey-change').click(function() {
+		$(this).parent().find('input').click();
+	});
+	
+	$('.filey-remove').click(function() {
+		$(this).parent().find('input').val('');
+		$(this).parent().find('.filey-show').text(options.labelNoFile);
+	});
+	
+	$(inputFields).change(function() {
 		var path = $(this).val().split('\\');
 		
 		if (typeof path[2] !== 'undefined') {
@@ -45,10 +60,10 @@ $.fn.filey = function(options){
 		} else {
 			var filename = $(this).val();
 		}
-
-    		$('.filey-show').text(filename);
-    	});
+	
+		$(this).parent().find('.filey-show').text(filename);
+		$(this).parent().find('.filey-change').text(options.labelChangeFile);
+	});
     	
-    });
     
 }
