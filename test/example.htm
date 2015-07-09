@@ -6,12 +6,24 @@
 <script src="jquery-1.11.3.js"></script>
 <script src="jquery.filey.js"></script>
 <script>
-$('input').filey();
+$(document).ready(function() {
+	$('input[type="file"]').filey({
+		removeFile: true,
+		labelNoFile: 'Keine Datei gewählt',
+		labelChooseFile: 'Datei wählen',
+		labelChangeFile: 'Neue Datei wählen',
+		labelRemoveFile: 'Datei entfernen'
+	});	
+})
 </script>
 </head>
 <body>
 <section style="padding: 50px;">
-<input type="file" name="bild">
+<div class="test"><input class="filey1" type="file" name="bild"></div>
+<div class="test"><input class="filey2" type="file" name="bild"></div>
+<div class="test"><input class="filey1" type="file" name="bild"></div>
+<div class="test"><input class="filey2" type="file" name="bild"></div>
+<div class="test"><input class="filey1" type="file" name="bild"></div>
 </section>
 </body>
 </html>
